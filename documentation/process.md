@@ -31,3 +31,17 @@ Apply:
 ## My process
 * write I understand of the code in note.md file
 * split loop  
+* 
+* extract loop in methods creating before a Data object to save calculated values.
+
+
+### Extract loop in method
+
+
+* with the simple extract method, the test fails because the sentence to be displayed is not the same; 
+the value is not retained with a in/out argument.
+I need to create object
+
+
+
+## 

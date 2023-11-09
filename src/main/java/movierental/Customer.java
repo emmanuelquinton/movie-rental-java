@@ -24,7 +24,35 @@ public class Customer {
         double totalAmount = 0;
         int frequentRenterPoints = 0;
         String result = "Rental Record for " + getName() + "\n";
+        DataTemp data = new DataTemp(totalAmount, result);
+        calculateTotalAmout(data);
 
+        frequentRenterPoints = calculateNewfrequentrenterPoint(frequentRenterPoints);
+
+        // add footer lines
+        data.result += "Amount owed is " + String.valueOf(data.totalAmount) + "\n";
+        data.result += "You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points";
+
+        return data.result;
+    }
+
+    private int calculateNewfrequentrenterPoint(int frequentRenterPoints) {
+        for (Rental each : _rentals) {
+
+
+
+            // add frequent renter points
+            frequentRenterPoints++;
+            // add bonus for a two day new release rental
+            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
+                frequentRenterPoints++;
+
+
+        }
+        return frequentRenterPoints;
+    }
+
+    private void calculateTotalAmout(DataTemp data) {
         for (Rental each : _rentals) {
             double thisAmount = 0;
 
@@ -47,27 +75,20 @@ public class Customer {
 
 
             // show figures for this rental
-            result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
-            totalAmount += thisAmount;
-        }
-
-        for (Rental each : _rentals) {
-
-
-
-            // add frequent renter points
-            frequentRenterPoints++;
-            // add bonus for a two day new release rental
-            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
-                frequentRenterPoints++;
-
+            data.result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
+            data.totalAmount += thisAmount;
 
         }
+    }
 
-        // add footer lines
-        result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
-        result += "You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points";
+    private static class DataTemp {
+        public double totalAmount;
+        public String result;
 
-        return result;
+        public DataTemp(double totalAmount, String result) {
+            this.totalAmount = totalAmount;
+            this.result = result;
+        }
+
     }
 }
