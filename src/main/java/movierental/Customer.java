@@ -21,38 +21,29 @@ public class Customer {
     }
 
     public String statement() {
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
-        String result = "Rental Record for " + getName() + "\n";
-        DataTemp data = new DataTemp(totalAmount, result);
-        calculateTotalAmout(data);
 
-        frequentRenterPoints = calculateNewfrequentrenterPoint(frequentRenterPoints);
+        DataTemp data = new DataTemp(getName());
+        calculateTotalAmount(data);
+        calculateNewFrequentRenterPoint(data);
 
         // add footer lines
         data.result += "Amount owed is " + String.valueOf(data.totalAmount) + "\n";
-        data.result += "You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points";
+        data.result += "You earned " + String.valueOf(data.frequentRenterPoints) + " frequent renter points";
 
         return data.result;
     }
 
-    private int calculateNewfrequentrenterPoint(int frequentRenterPoints) {
+    private void calculateNewFrequentRenterPoint(DataTemp data) {
         for (Rental each : _rentals) {
-
-
-
             // add frequent renter points
-            frequentRenterPoints++;
+            data.frequentRenterPoints++;
             // add bonus for a two day new release rental
             if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
-                frequentRenterPoints++;
-
-
+                data.frequentRenterPoints++;
         }
-        return frequentRenterPoints;
     }
 
-    private void calculateTotalAmout(DataTemp data) {
+    private void calculateTotalAmount(DataTemp data) {
         for (Rental each : _rentals) {
             double thisAmount = 0;
 
@@ -84,10 +75,11 @@ public class Customer {
     private static class DataTemp {
         public double totalAmount;
         public String result;
-
-        public DataTemp(double totalAmount, String result) {
-            this.totalAmount = totalAmount;
-            this.result = result;
+        int frequentRenterPoints = 0;
+        public DataTemp(String name) {
+            this.totalAmount = 0;
+            this. frequentRenterPoints = 0;
+            this.result = "Rental Record for " + name + "\n";
         }
 
     }

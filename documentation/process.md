@@ -30,18 +30,20 @@ Apply:
 
 ## My process
 * write I understand of the code in note.md file
-* split loop  
-* 
+* split loop
 * extract loop in methods creating before a Data object to save calculated values.
-
+* refactorize dataTemp
 
 ### Extract loop in method
 
 
 * with the simple extract method, the test fails because the sentence to be displayed is not the same; 
 the value is not retained with a in/out argument.
-I need to create object
+I need to create object DataTemp (it will be rename later if needed) .
 
 
 
-## 
+
+## refactorize dataTemp
+At this setp I have a DataTemp object, but I can add in it the frequentRenderPoint ad the initialization.
+
