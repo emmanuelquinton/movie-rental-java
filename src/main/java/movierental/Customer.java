@@ -66,16 +66,20 @@ public class Customer {
 
 
             // show figures for this rental
-            data.result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
+            data.result += addToStatement(each.getMovie().getTitle() , thisAmount);
             data.totalAmount += thisAmount;
 
         }
     }
 
+    private static String addToStatement(String  title, double thisAmount) {
+        return "\t" + title+ "\t" + String.valueOf(thisAmount) + "\n";
+    }
+
     private static class DataTemp {
         public double totalAmount;
         public String result;
-        int frequentRenterPoints = 0;
+        int frequentRenterPoints = 0; 
         public DataTemp(String name) {
             this.totalAmount = 0;
             this. frequentRenterPoints = 0;

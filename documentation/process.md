@@ -33,6 +33,8 @@ Apply:
 * split loop
 * extract loop in methods creating before a Data object to save calculated values.
 * refactorize dataTemp
+* Add method to display
+  * extract ligne 69 into private method
 
 ### Extract loop in method
 
