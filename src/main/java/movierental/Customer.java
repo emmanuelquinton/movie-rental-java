@@ -66,14 +66,10 @@ public class Customer {
 
 
             // show figures for this rental
-            data.result += addToStatement(each.getMovie().getTitle() , thisAmount);
+            data.addToStatement(each.getMovie().getTitle() , thisAmount);
             data.totalAmount += thisAmount;
 
         }
-    }
-
-    private static String addToStatement(String  title, double thisAmount) {
-        return "\t" + title+ "\t" + String.valueOf(thisAmount) + "\n";
     }
 
     private static class DataTemp {
@@ -86,5 +82,8 @@ public class Customer {
             this.result = "Rental Record for " + name + "\n";
         }
 
+        public void addToStatement(String  title, double thisAmount) {
+            this.result += "\t" + title+ "\t" + String.valueOf(thisAmount) + "\n";
+        }
     }
 }
