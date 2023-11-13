@@ -36,6 +36,7 @@ Apply:
 * Add method to display
   * extract ligne 69 into private method
 
+
 ### Extract loop in method
 
 
@@ -48,4 +49,9 @@ I need to create object DataTemp (it will be rename later if needed) .
 
 ## refactorize dataTemp
 At this setp I have a DataTemp object, but I can add in it the frequentRenderPoint ad the initialization.
+
+## update DataTemp and extract the result construction from statement method
+After the addToStatement  method has been moved into DataTempt, we can see that thetotalAmout and the result (displayed sentences)
+are calculated fields. from each rentals.
+Also I'll create a new field (Map String, doule) which will contain the amount of each title
 

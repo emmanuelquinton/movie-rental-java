@@ -1,7 +1,7 @@
 package movierental;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.DoubleStream;
 
 public class Customer {
 
@@ -27,10 +27,9 @@ public class Customer {
         calculateNewFrequentRenterPoint(data);
 
         // add footer lines
-        data.result += "Amount owed is " + String.valueOf(data.totalAmount) + "\n";
-        data.result += "You earned " + String.valueOf(data.frequentRenterPoints) + " frequent renter points";
 
-        return data.result;
+
+        return data.getStatements();
     }
 
     private void calculateNewFrequentRenterPoint(DataTemp data) {
@@ -64,26 +63,40 @@ public class Customer {
                     break;
             }
 
-
+            data.putTitleAmount(each.getMovie().getTitle(), thisAmount);
             // show figures for this rental
-            data.addToStatement(each.getMovie().getTitle() , thisAmount);
-            data.totalAmount += thisAmount;
-
         }
     }
 
     private static class DataTemp {
         public double totalAmount;
         public String result;
-        int frequentRenterPoints = 0; 
+        int frequentRenterPoints = 0;
+
+        Map<String, Double> titleAmounts = new LinkedHashMap<>() ;
+
+
         public DataTemp(String name) {
             this.totalAmount = 0;
             this. frequentRenterPoints = 0;
             this.result = "Rental Record for " + name + "\n";
         }
 
-        public void addToStatement(String  title, double thisAmount) {
-            this.result += "\t" + title+ "\t" + String.valueOf(thisAmount) + "\n";
+        public String getStatements() {
+            this.titleAmounts.forEach((String title, Double amount ) -> this.result += "\t" + title+ "\t" + String.valueOf(amount) + "\n");
+            this.result += "Amount owed is " + String.valueOf(this.getTotalAmount()) + "\n";
+            this.result += "You earned " + String.valueOf(this.frequentRenterPoints) + " frequent renter points";
+            return this.result;
+        }
+
+        public double getTotalAmount() {
+
+           return  this.titleAmounts.values().stream().mapToDouble(amount -> amount).sum();
+
+        }
+
+        public void putTitleAmount(String title, double amount) {
+            titleAmounts.put(title, amount);
         }
     }
 }
