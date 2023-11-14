@@ -65,7 +65,7 @@ public class Customer {
                     amount = new Amount(0);
             }
 
-            data.putTitleAmount(each.getMovie().getTitle(), amount);
+            data.putTitleAmount(new Title(each.getMovie().getTitle()), amount);
             // show figures for this rental
         }
     }
@@ -76,7 +76,7 @@ public class Customer {
 
         private String customerName;
 
-        Map<String, Amount> titleAmounts = new LinkedHashMap<>() ;
+        Map<Title, Amount> titleAmounts = new LinkedHashMap<>() ;
 
 
         public Statement(String customerName) {
@@ -87,7 +87,7 @@ public class Customer {
 
         public String getContent() {
             this.content = "Rental Record for " + customerName + "\n";
-            this.titleAmounts.forEach((String title, Amount amount ) -> this.content += "\t" + title+ "\t" + String.valueOf(amount.value()) + "\n");
+            this.titleAmounts.forEach((Title title, Amount amount ) -> this.content += "\t" + title.value()+ "\t" + String.valueOf(amount.value()) + "\n");
             this.content += "Amount owed is " + String.valueOf(this.getTotalAmount()) + "\n";
             this.content += "You earned " + String.valueOf(this.frequentRenterPoints) + " frequent renter points";
             return this.content;
@@ -99,7 +99,7 @@ public class Customer {
 
         }
 
-        public void putTitleAmount(String title, Amount amount) {
+        public void putTitleAmount(Title title, Amount amount) {
             titleAmounts.put(title, amount);
         }
     }
