@@ -1,7 +1,6 @@
 package movierental;
 
 import java.util.*;
-import java.util.stream.DoubleStream;
 
 public class Customer {
 
@@ -22,17 +21,13 @@ public class Customer {
 
     public String statement() {
 
-        DataTemp data = new DataTemp(getName());
+        Statement data = new Statement(getName());
         calculateTotalAmount(data);
         calculateNewFrequentRenterPoint(data);
-
-        // add footer lines
-
-
-        return data.getStatements();
+        return data.getContent();
     }
 
-    private void calculateNewFrequentRenterPoint(DataTemp data) {
+    private void calculateNewFrequentRenterPoint(Statement data) {
         for (Rental each : _rentals) {
             // add frequent renter points
             data.frequentRenterPoints++;
@@ -42,60 +37,69 @@ public class Customer {
         }
     }
 
-    private void calculateTotalAmount(DataTemp data) {
+    private void calculateTotalAmount(Statement data) {
         for (Rental each : _rentals) {
-            double thisAmount = 0;
+            Amount amount;
 
             //determine amounts for each line
             switch (each.getMovie().getPriceCode()) {
                 case Movie.REGULAR:
-                    thisAmount += 2;
-                    if (each.getDaysRented() > 2)
-                        thisAmount += (each.getDaysRented() - 2) * 1.5;
+                       if (each.getDaysRented() > 2) {
+                           amount = new Amount (2+( (each.getDaysRented() - 2) * 1.5));
+                       } else {
+                           amount = new Amount(2);
+                       }
                     break;
                 case Movie.NEW_RELEASE:
-                    thisAmount += each.getDaysRented() * 3;
+                   amount = new Amount(each.getDaysRented() * 3);
                     break;
                 case Movie.CHILDRENS:
-                    thisAmount += 1.5;
-                    if (each.getDaysRented() > 3)
-                        thisAmount += (each.getDaysRented() - 3) * 1.5;
+
+                    if (each.getDaysRented() > 3) {
+                        amount = new Amount(1.5+((each.getDaysRented() - 3) * 1.5));
+                    } else {
+                        amount = new Amount(1.5);
+                    }
                     break;
+                default:
+                    amount = new Amount(0);
             }
 
-            data.putTitleAmount(each.getMovie().getTitle(), thisAmount);
+            data.putTitleAmount(each.getMovie().getTitle(), amount);
             // show figures for this rental
         }
     }
 
-    private static class DataTemp {
-        public double totalAmount;
-        public String result;
+    private static class Statement {
+        private String content;
         int frequentRenterPoints = 0;
 
-        Map<String, Double> titleAmounts = new LinkedHashMap<>() ;
+        private String customerName;
+
+        Map<String, Amount> titleAmounts = new LinkedHashMap<>() ;
 
 
-        public DataTemp(String name) {
-            this.totalAmount = 0;
+        public Statement(String customerName) {
+            this.customerName = customerName;
             this. frequentRenterPoints = 0;
-            this.result = "Rental Record for " + name + "\n";
+
         }
 
-        public String getStatements() {
-            this.titleAmounts.forEach((String title, Double amount ) -> this.result += "\t" + title+ "\t" + String.valueOf(amount) + "\n");
-            this.result += "Amount owed is " + String.valueOf(this.getTotalAmount()) + "\n";
-            this.result += "You earned " + String.valueOf(this.frequentRenterPoints) + " frequent renter points";
-            return this.result;
+        public String getContent() {
+            this.content = "Rental Record for " + customerName + "\n";
+            this.titleAmounts.forEach((String title, Amount amount ) -> this.content += "\t" + title+ "\t" + String.valueOf(amount.value()) + "\n");
+            this.content += "Amount owed is " + String.valueOf(this.getTotalAmount()) + "\n";
+            this.content += "You earned " + String.valueOf(this.frequentRenterPoints) + " frequent renter points";
+            return this.content;
         }
 
         public double getTotalAmount() {
 
-           return  this.titleAmounts.values().stream().mapToDouble(amount -> amount).sum();
+           return  this.titleAmounts.values().stream().mapToDouble(Amount::value).sum();
 
         }
 
-        public void putTitleAmount(String title, double amount) {
+        public void putTitleAmount(String title, Amount amount) {
             titleAmounts.put(title, amount);
         }
     }

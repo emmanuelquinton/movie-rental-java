@@ -35,7 +35,9 @@ Apply:
 * refactorize dataTemp
 * Add method to display
   * extract ligne 69 into private method
-
+* Create value objects
+  * update used jdk; move to 17
+  * create value object for amount, frequente renter points and result
 
 ### Extract loop in method
 
