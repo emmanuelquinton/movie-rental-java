@@ -38,6 +38,7 @@ Apply:
 * Create value objects
   * update used jdk; move to 17
   * create value object for amount, frequente renter points and result
+* Rename vairiable
 
 ### Extract loop in method
 

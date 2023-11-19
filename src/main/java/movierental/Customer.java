@@ -27,36 +27,36 @@ public class Customer {
         return data.getContent();
     }
 
-    private void calculateNewFrequentRenterPoint(Statement data) {
-        for (Rental each : _rentals) {
+    private void calculateNewFrequentRenterPoint(Statement statement) {
+        for (Rental rental : _rentals) {
             // add frequent renter points
-            data.frequentRenterPoints++;
+            statement.frequentRenterPoints++;
             // add bonus for a two day new release rental
-            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
-                data.frequentRenterPoints++;
+            if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE) && rental.getDaysRented() > 1)
+                statement.frequentRenterPoints++;
         }
     }
 
     private void calculateTotalAmount(Statement data) {
-        for (Rental each : _rentals) {
+        for (Rental rental : _rentals) {
             Amount amount;
 
             //determine amounts for each line
-            switch (each.getMovie().getPriceCode()) {
+            switch (rental.getMovie().getPriceCode()) {
                 case Movie.REGULAR:
-                       if (each.getDaysRented() > 2) {
-                           amount = new Amount (2+( (each.getDaysRented() - 2) * 1.5));
+                       if (rental.getDaysRented() > 2) {
+                           amount = new Amount (2+( (rental.getDaysRented() - 2) * 1.5));
                        } else {
                            amount = new Amount(2);
                        }
                     break;
                 case Movie.NEW_RELEASE:
-                   amount = new Amount(each.getDaysRented() * 3);
+                   amount = new Amount(rental.getDaysRented() * 3);
                     break;
                 case Movie.CHILDRENS:
 
-                    if (each.getDaysRented() > 3) {
-                        amount = new Amount(1.5+((each.getDaysRented() - 3) * 1.5));
+                    if (rental.getDaysRented() > 3) {
+                        amount = new Amount(1.5+((rental.getDaysRented() - 3) * 1.5));
                     } else {
                         amount = new Amount(1.5);
                     }
@@ -65,7 +65,7 @@ public class Customer {
                     amount = new Amount(0);
             }
 
-            data.putTitleAmount(new Title(each.getMovie().getTitle()), amount);
+            data.putTitleAmount(new Title(rental.getMovie().getTitle()), amount);
             // show figures for this rental
         }
     }
